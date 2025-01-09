@@ -2,13 +2,16 @@ import axios from "axios";
 import { useState } from "react";
 
 import config from "../config";
+import ApiClient from "./ApiClient";
 
 const NewTypology = () => {
     const [typology_name, setName] = useState('');
 
+    const apiClient = new ApiClient()
+
     const addTypology = () => {
         console.log(typology_name);
-        axios.post(config.apiUrl+"typology/add/", {typology_display_name: typology_name}).then(res => {
+        axios.post(new URL(config.apiPrefix+"typology/add/", apiClient.baseUrl).href, {typology_display_name: typology_name}).then(res => {
             console.log(res);
         })
         setName('');

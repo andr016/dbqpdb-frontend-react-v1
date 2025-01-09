@@ -5,11 +5,13 @@ import NewSubject from './NewSubject';
 import Link from './base/Link';
 import ApiClient from './ApiClient';
 import config from '../config';
+import SubjectCard from './SubjectCard';
 
 // Define a TypeScript type for the subject data
 interface Subject {
   subject_id: number;
   subject_name: string;
+  image_url: string;
 }
 
 const SubjectsTable: React.FC = () => {
@@ -45,18 +47,16 @@ const SubjectsTable: React.FC = () => {
   return (
     <div>
       <h1 className="text-4xl py-2">Subjects</h1>
-      <div className="py-5">
-        <table className="w-96 table-fixed border-2  border-collapse">
-          <tbody>
+      <div className="py-5 w-1/2">
+        <div className="flex flex-wrap">
             {subjects.map((subject) => (
               <tr key={subject.subject_id}>
                 <td>
-                  <Link href={"/subject/"+subject.subject_id}>{subject.subject_name.length == 0 ? "noname!" : subject.subject_name}</Link>
+                  <SubjectCard src={new URL(subject.image_url, apiClient.baseUrl).href} subject_id={subject.subject_id} subject_name={subject.subject_name}/>
                 </td>
               </tr>
             ))}
-          </tbody>
-        </table>
+        </div>
       </div>
       <NewSubject status={useEffect}/>
     </div>

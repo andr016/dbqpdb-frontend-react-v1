@@ -63,7 +63,7 @@ function SubjectPage() {
         });
 
         // After upload, set the image URL to state
-        setImageUrl(new URL(apiClient.baseUrl).href+response.data.image_url);
+        setImageUrl(new URL(response.data.image_url, apiClient.baseUrl).href);
         alert("Image uploaded successfully!");
       } catch (error) {
         console.error("Error uploading image", error);
@@ -91,7 +91,7 @@ function SubjectPage() {
         .get(new URL(config.apiPrefix+"subject/"+id, apiClient.baseUrl).href)
         .then((response) => {
             setData(response.data);
-            setImageUrl(new URL(apiClient.baseUrl).href+response.data.image_url);
+            setImageUrl(new URL(response.data.image_url, apiClient.baseUrl).href);
             setLoading(false);
             //data.map((item) => alert(item.subject_id))
         })
@@ -141,7 +141,7 @@ function SubjectPage() {
         <h1 className="text-4xl py-2">{data?.subject}</h1>
         <h2 className="italic">Subject ID: {id}</h2>
         <input type="file" onChange={handleImageChange} />
-        <button onClick={handleImageUpload}>Upload Image</button>
+        <Button onClick={handleImageUpload}>Upload Image</Button>
         <div className="py-2">
       </div>
       <TypologyTable data={data} />
