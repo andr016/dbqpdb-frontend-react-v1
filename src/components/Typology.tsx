@@ -2,6 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import config from "../config";
+import Button from "./base/Button";
+import ApiClient from "./ApiClient";
 
 interface Type {
     type_id: number;
@@ -18,10 +20,12 @@ const Typology = () => {
     const [newTypes, setNewTypes] = useState<Type[]>();
     const [loading, setLoading] = useState(true);
 
+    const apiClient = new ApiClient
+
     useEffect(() => {
         const fetchTypes = async () => {
             // will totally fix that later
-            const response = await fetch(`http://localhost:8000/api/typology/${id}`);
+            const response = await fetch(new URL(config.apiPrefix+`typology/${id}`, apiClient.baseUrl).href);
             const data = await response.json();
             setTypes(data);
             setNewTypes(data);
@@ -45,13 +49,13 @@ const Typology = () => {
     }
 
     const postNewTypes = () => {
-        const response = axios.post(config.apiUrl+`submit/typology/${id}`, newTypes);
+        const response = axios.post(new URL(config.apiPrefix+`submit/typology/${id}`, apiClient.baseUrl).href, newTypes);
         console.log(response)
     }
 
     const deleteTypology = () => {
         if (window.confirm("Delete this typology? NAME")) {
-            axios.post(config.apiUrl+"delete/typology/"+id)
+            axios.post(new URL(config.apiPrefix+`delete/typology/${id}`, apiClient.baseUrl).href)
             .then(response => {
                 console.log(response)
                 window.location.href = "/typology/"
@@ -67,11 +71,11 @@ const Typology = () => {
     return (
         <div>
             <h1>Typology</h1>
-            <button onClick={deleteTypology}>Delete typology</button>
+            <Button onClick={deleteTypology}>Delete typology</Button>
             <p>Type count: {newTypes?.length}</p>
-            <button onClick={addNewType}>New type</button>
-            <button onClick={resetToFetch}>Reset</button>
-            <button onClick={postNewTypes}>Save</button>
+            <Button onClick={addNewType}>New type</Button>
+            <Button onClick={resetToFetch}>Reset</Button>
+            <Button onClick={postNewTypes}>Save</Button>
             <table>
                 <thead>
                     <tr>

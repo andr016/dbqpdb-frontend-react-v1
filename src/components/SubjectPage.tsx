@@ -5,6 +5,7 @@ import config from '../config';
 
 import TypologyTable from './TypologyTable';
 import Button from './base/Button';
+import ApiClient from './ApiClient';
 
 interface Post {
     subject_id: number;
@@ -39,6 +40,8 @@ function SubjectPage() {
     
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imageUrl, setImageUrl] = useState<string>("");
+    
+    const apiClient = new ApiClient()
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
@@ -53,14 +56,14 @@ function SubjectPage() {
       formData.append("image", imageFile);
 
       try {
-        const response = await axios.post(`${config.apiUrl}upload/subject/${id}`, formData, {
+        const response = await axios.post(`${new URL(config.apiPrefix+"upload/subject/"+id, apiClient.baseUrl).href}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
 
         // After upload, set the image URL to state
-        setImageUrl("http://localhost:8000/"+response.data.image_url);
+        setImageUrl(new URL(apiClient.baseUrl).href+response.data.image_url);
         alert("Image uploaded successfully!");
       } catch (error) {
         console.error("Error uploading image", error);
@@ -85,10 +88,10 @@ function SubjectPage() {
     let url_subject_id: number = 2
     useEffect(() => {
         axios
-        .get(config.apiUrl+'subject/'+id)
+        .get(new URL(config.apiPrefix+"subject/"+id, apiClient.baseUrl).href)
         .then((response) => {
             setData(response.data);
-            setImageUrl("http://localhost:8000"+response.data.image_url);
+            setImageUrl(new URL(apiClient.baseUrl).href+response.data.image_url);
             setLoading(false);
             //data.map((item) => alert(item.subject_id))
         })
@@ -117,7 +120,7 @@ function SubjectPage() {
 
     async function handleClick() {
         if (window.confirm(`Delete this subject?\n\n${data?.subject}`)) {
-        axios.post(config.apiUrl+"subject/delete/"+id)
+        axios.post(new URL(config.apiPrefix+"delete/subject/"+id, apiClient.baseUrl).href)
             .then(response => {
                 console.log(response)
                 window.location.href = "/subject/"

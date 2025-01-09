@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import config from "../config";
 import NewTypology from "./NewTypology";
 import Link from "./base/Link";
+import ApiClient from "./ApiClient";
 
 interface Typology {
     typology_id: number;
@@ -14,9 +15,11 @@ const TypologyList = () => {
     const [typologies, setTypologies] = useState<Typology[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    const apiClient = new ApiClient
+
     useEffect(() => {
         const fetchTypologies = async () => {
-            const response = await fetch(config.apiUrl+'typology');
+            const response = await fetch(new URL(config.apiPrefix+"typology", apiClient.baseUrl).href);
             const data = await response.json();
             setTypologies(data);
             setIsLoading(false);

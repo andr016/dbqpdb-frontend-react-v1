@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import config from '../config';
 import Button from './base/Button';
 import Link from './base/Link';
+import ApiClient from './ApiClient';
 
 // Define TypeScript types for the expected props
 interface Type {
@@ -39,9 +40,11 @@ const TypologyTable: React.FC<TypologyTableProps> = ({ data }) => {
 
     const { id } = useParams()
 
+    const apiClient = new ApiClient()
+
     const fetchTypologyList = () => {
         axios
-            .get(config.apiUrl+'typology/')
+            .get(new URL(config.apiPrefix+"typology", apiClient.baseUrl).href)
             .then((response) => {
                 setTypologyList(response.data);
             })
@@ -52,7 +55,7 @@ const TypologyTable: React.FC<TypologyTableProps> = ({ data }) => {
 
     const fetchTypeList = async () => {
         try {
-          const response = await axios.get<Type[]>(config.apiUrl+'types');
+          const response = await axios.get<Type[]>(new URL(config.apiPrefix+"types", apiClient.baseUrl).href);
           setTypeList(response.data)
           const typesMap = new Map(response.data.map(type => [type.type_id, type]));
           setTypeListMap(typesMap);
@@ -65,7 +68,7 @@ const TypologyTable: React.FC<TypologyTableProps> = ({ data }) => {
     const handleSubmit = async () => {
         try {
             // Replace 'your-api-url' with the actual URL of your API
-            const response = await axios.post(config.apiUrl+"submitsubject/", typologyData);
+            const response = await axios.post(new URL(config.apiPrefix+"submitsubject", apiClient.baseUrl).href, typologyData);
             
             // Handle the response (e.g., show a success message)
             console.log('Response:', response.data);

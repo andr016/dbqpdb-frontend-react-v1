@@ -3,6 +3,8 @@ import axios from 'axios';
 
 import NewSubject from './NewSubject';
 import Link from './base/Link';
+import ApiClient from './ApiClient';
+import config from '../config';
 
 // Define a TypeScript type for the subject data
 interface Subject {
@@ -15,10 +17,12 @@ const SubjectsTable: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const apiClient = new ApiClient()
   // Fetch subjects from the API
   useEffect(() => {
+
     axios
-      .get('http://localhost:8000/api/subject/')
+      .get(new URL(config.apiPrefix+"subject", apiClient.baseUrl).href)
       .then((response) => {
         setSubjects(response.data); // Assuming the API returns an array of subjects
         setLoading(false);
