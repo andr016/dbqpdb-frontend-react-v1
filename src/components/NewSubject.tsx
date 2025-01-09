@@ -16,6 +16,7 @@ const NewSubject = ({ status }) => { // status is meant for updating subject lis
         console.log(subject_name);
         axios.post(new URL(config.apiPrefix+"subject/add/", apiClient.baseUrl).href, {subject_name: subject_name}).then(res => {
             console.log(res);
+
             status
         })
         setName('');

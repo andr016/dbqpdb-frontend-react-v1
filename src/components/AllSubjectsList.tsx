@@ -35,6 +35,10 @@ const SubjectsTable: React.FC = () => {
       });
   }, []);
 
+  const handleStatus = (data) => {
+    console.log(data)
+  }
+
   // Render the loading state, error, or the table
   if (loading) {
     return <div>Loading...</div>;
@@ -58,7 +62,7 @@ const SubjectsTable: React.FC = () => {
             ))}
         </div>
       </div>
-      <NewSubject status={useEffect}/>
+      <NewSubject status={handleStatus}/>
     </div>
   );
 };
