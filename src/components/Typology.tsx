@@ -70,7 +70,7 @@ const Typology = () => {
 
     return (
         <div>
-            <h1>Typology</h1>
+            <H1>Typology</H1>
             <Button onClick={deleteTypology}>Delete typology</Button>
             <p>Type count: {newTypes?.length}</p>
             <Button onClick={addNewType}>New type</Button>
@@ -98,9 +98,9 @@ const Typology = () => {
                             // Update the state with the new array of types
                             setNewTypes(updatedTypes);
                         }}/></td>
-                        <td><button onClick={e=> {
+                        <td><Button onClick={e=> {
                             setNewTypes(newTypes?.filter((type2) => type2.type_id !== type.type_id));
-                        }}>Delete type</button></td>
+                        }}>Delete type</Button></td>
                     </tr>))}
                 </tbody>
             </table>
