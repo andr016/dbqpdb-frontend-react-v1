@@ -36,7 +36,7 @@ const SubjectsTable: React.FC = () => {
   }, []);
 
   const handleStatus = (data) => {
-    console.log(data)
+    console.log(data.status)
   }
 
   // Render the loading state, error, or the table
@@ -50,12 +50,12 @@ const SubjectsTable: React.FC = () => {
 
   return (
     <div>
-      <h1 className="text-4xl py-2">Subjects</h1>
+      <H1>Subjects</H1>
       <div className="py-5 w-1/2">
         <div className="flex flex-wrap">
             {subjects.map((subject) => (
               <tr key={subject.subject_id}>
-                <td>
+                <td className="pr-2">
                   <SubjectCard src={new URL(subject.image_url, apiClient.baseUrl).href} subject_id={subject.subject_id} subject_name={subject.subject_name}/>
                 </td>
               </tr>

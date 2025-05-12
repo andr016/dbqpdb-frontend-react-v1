@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import config from "../config";
 import Button from "./base/Button";
+import Input from "./base/Input"
 import ApiClient from "./ApiClient";
 
 
@@ -24,8 +25,8 @@ const NewSubject = ({ status }) => { // status is meant for updating subject lis
 
     return (
         <div>
-            <h3>New Subject</h3>
-            <input value={subject_name} type="text" onChange={(e) => setName(e.target.value)}/>
+            <h3 className="text-gray-400 mb-1">Create new subject</h3>
+            <Input type="text" onChange={(e) => setName(e.target.value)}/>
             <Button onClick={addSubject}>Add</Button>
         </div>
     )
