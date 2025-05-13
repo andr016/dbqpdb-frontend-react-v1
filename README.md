@@ -5,6 +5,10 @@
 ```bash
 npm install -D vite
 ```
+or
+```
+npm install
+```
 ## Running
 * Run locally
 ```bash
