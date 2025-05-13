@@ -42,7 +42,7 @@ const SubjectsTable: React.FC = () => {
 
   // Render the loading state, error, or the table
   if (loading) {
-    return <div>Loading...</div>;
+    return <div><H1>Subjects</H1>Fetching...</div>;
   }
 
   if (error) {

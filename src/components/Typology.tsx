@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import H1 from "./base/H1";
 import config from "../config";
 import Button from "./base/Button";
 import ApiClient from "./ApiClient";
+import Input from "./base/Input";
 
 interface Type {
     type_id: number;
@@ -84,7 +86,7 @@ const Typology = () => {
                 <tbody>
                 {newTypes?.map(type => (
                     <tr key={type.type_id}>
-                        <td><input value={type.type_display_name} onChange={e => {
+                        <td><Input value={type.type_display_name} onChange={e => {
                             const updatedTypes = newTypes?.map((type2) => {
                             if (type2.type_id === type.type_id) {
                                 return {
