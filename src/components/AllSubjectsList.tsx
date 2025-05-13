@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import NewSubject from './NewSubject';
 import Link from './base/Link';
+import H1 from './base/H1';
 import ApiClient from './ApiClient';
 import config from '../config';
 import SubjectCard from './SubjectCard';
@@ -48,10 +49,12 @@ const SubjectsTable: React.FC = () => {
     return <div>{error}</div>;
   }
 
+  document.title = "All subjects"
+
   return (
     <div>
       <H1>Subjects</H1>
-      <div className="py-5 w-1/2">
+      <div className="py-5 w-3/4">
         <div className="flex flex-wrap">
             {subjects.map((subject) => (
               <tr key={subject.subject_id}>

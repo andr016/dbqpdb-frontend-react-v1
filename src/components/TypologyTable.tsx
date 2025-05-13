@@ -91,12 +91,8 @@ const TypologyTable: React.FC<TypologyTableProps> = ({ data }) => {
     return (
         <div className="space-y-2">
             <div className="space-x-2">
-            <Button onClick={(e) => setTypologyData(data)}>
-                Reset changes
-            </Button>
-            <Button onClick={handleSubmit}>Save</Button>
             </div>
-            <table className="w-96 table-fixed border-2  border-collapse">
+            <table className="w-96 table-fixed border-0  border-collapse">
                 <tbody>
                 {typologyList.length === 0 ? (
                     <tr>
@@ -110,6 +106,17 @@ const TypologyTable: React.FC<TypologyTableProps> = ({ data }) => {
                         </td>
                         <td>
                             <select
+                                className="border-2 bg-gray-200 border-gray-300
+                                hover:bg-gray-300 hover:border-gray-400
+                                
+                                border-none
+                                p-1
+                                rounded-lg
+                                dark:text-white
+                                dark:bg-gray-600
+                                dark:border-none
+                                dark:hover:bg-gray-700
+                                "
                                 value={
                                     typologyData?.types?.map((typeId) => {
                                         const type = typeList.find(
@@ -156,6 +163,10 @@ const TypologyTable: React.FC<TypologyTableProps> = ({ data }) => {
                 )}
                 </tbody>
             </table>
+            <Button onClick={(e) => setTypologyData(data)}>
+                Reset changes
+            </Button>
+            <Button onClick={handleSubmit}>Save</Button>
         </div>
     );
 };

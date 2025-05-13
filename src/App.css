@@ -5,6 +5,20 @@
   text-align: center;
 }
 
+body {
+  @apply bg-black; /* Set body background color to black */
+}
+
+/* index.css */
+* {
+  -webkit-font-smoothing: antialiased; /* Optional: smooth text rendering */
+}
+
+html {
+  background-color: black; /* Prevents white flash */
+  -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

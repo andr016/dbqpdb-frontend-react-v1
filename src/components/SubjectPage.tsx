@@ -131,10 +131,12 @@ function SubjectPage() {
         }
     }
 
+    document.title = data?.subject
+
     return (<div className="space-y-2">
       {imageUrl && (
       <div>
-        <img src={imageUrl} alt="subject picture" className="max-w-xs"/>
+        <img src={imageUrl} alt="subject picture" className="max-w-xl"/>
       </div>
     )}
       <div className="display-flex">
@@ -144,9 +146,9 @@ function SubjectPage() {
         <Button onClick={handleImageUpload}>Upload Image</Button>
         <div className="py-2">
       </div>
+      <Button onClick={handleClick}>Delete subject</Button>
       <TypologyTable data={data} />
       </div>
-      <Button onClick={handleClick}>Delete subject</Button>
     </div>
     )
 }
