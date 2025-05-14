@@ -2,18 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    @apply bg-black; /* Set body background color to black */
-}
-
-html {
-    -moz-background-inline-policy: continuous;
-    -webkit-background-inline-policy: continuous;
-}
-
-/* index.css */
-html, body {
-    background-color: black !important; /* Force the background color to black */
-    margin: 0;
-    height: 100%;
+@theme {
+    --color-delete: oklch(0.72 0.11 178);
 }

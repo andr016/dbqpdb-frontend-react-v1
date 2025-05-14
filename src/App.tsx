@@ -4,11 +4,11 @@ import Home from './components/Home'
 import NotFound from './components/NotFound'
 import AllSubjectsList from './components/AllSubjectsList'
 import TypologyList from './components/TypologyList'
+import Typology from './components/Typology'
+import LoginPage from './components/LoginPage'
 
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
 import axios from 'axios'
-import Typology from './components/Typology'
-import LoginPage from './components/LoginPage'
 import { Suspense } from 'react'
 
 const api = axios.create({
@@ -17,8 +17,7 @@ const api = axios.create({
 // ATTENTION! Eto moe pervoe video ne sudite strogo mne 10 let
 
 function App() {
-  return <Suspense fallback={<div>Loading...</div>}>
-  <div className="w-full min-h-screen bg-gray-900 text-gray-200">
+  return <div className="w-full min-h-screen bg-gray-900 text-gray-200">
     <TopBar/>
     <div className="p-4">
       <Router>
@@ -34,7 +33,6 @@ function App() {
       </Router>
     </div>
   </div>
-  </Suspense>
 }
 
 export default App

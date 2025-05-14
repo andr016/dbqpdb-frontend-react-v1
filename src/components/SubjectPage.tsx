@@ -6,6 +6,7 @@ import config from '../config';
 import TypologyTable from './TypologyTable';
 import Button from './base/Button';
 import ApiClient from './ApiClient';
+import DeleteButton from './base/DeleteButton';
 
 interface Post {
     subject_id: number;
@@ -34,7 +35,6 @@ interface TypologyData {
     image_url: string;
 }
   
-
 function SubjectPage() {
     const { id } = useParams();
     
@@ -49,43 +49,31 @@ function SubjectPage() {
         }
       };
 
-      // Handle image upload
-  const handleImageUpload = async () => {
-    if (imageFile) {
-      const formData = new FormData();
-      formData.append("image", imageFile);
+    const handleImageUpload = async () => {
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("image", imageFile);
 
-      try {
-        const response = await axios.post(`${new URL(config.apiPrefix+"upload/subject/"+id, apiClient.baseUrl).href}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        try {
+          const response = await axios.post(`${new URL(config.apiPrefix+"upload/subject/"+id, apiClient.baseUrl).href}`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
 
-        // After upload, set the image URL to state
-        setImageUrl(new URL(response.data.image_url, apiClient.baseUrl).href);
-        alert("Image uploaded successfully!");
-      } catch (error) {
-        console.error("Error uploading image", error);
-        alert("Error uploading image");
+          setImageUrl(new URL(response.data.image_url, apiClient.baseUrl).href);
+          alert("Image uploaded successfully!");
+        } catch (error) {
+          console.error("Error uploading image", error);
+          alert("Error uploading image");
+        }
       }
-    }
-  };
+    };
 
     const [data, setData] = useState<TypologyData | null>(null);
-    const [loading, setLoading] = useState(true); // State to track loading state
-    const [error, setError] = useState(null); // State to store any error
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // // Show loading message while fetching
-    // if (loading) {
-    //     return <div>Loading...</div>;
-    // }
-
-    // // Show error message if something went wrong
-    // if (error) {
-    //     return <div>Error fetching data: {error}</div>;
-    // }
-    let url_subject_id: number = 2
     useEffect(() => {
         axios
         .get(new URL(config.apiPrefix+"subject/"+id, apiClient.baseUrl).href)
@@ -93,29 +81,20 @@ function SubjectPage() {
             setData(response.data);
             setImageUrl(new URL(response.data.image_url, apiClient.baseUrl).href);
             setLoading(false);
-            //data.map((item) => alert(item.subject_id))
         })
         .catch((err) => {
-            setError(err.message); // Set error message if an error occurs
-            setLoading(false); // Set loading to false
+            setError(err.message); 
+            setLoading(false);
         });
     }, []) // empty array so it doesn't loop lol
 
-      // Show loading message while fetching data
+    // Show loading message while fetching data
     if (loading) {
-        return <div>Loading...</div>;
+        return <div>Fetching...</div>;
     }
 
-    // Show error message if there is an error fetching data
     if (error) {
         return <div>Error: {error}</div>;
-    }
-
-    async function getSubject(id: number) {
-        //var response = await
-       
-
-        //return (response.map())
     }
 
     async function handleClick() {
@@ -141,12 +120,11 @@ function SubjectPage() {
     )}
       <div className="display-flex">
         <h1 className="text-4xl py-2">{data?.subject}</h1>
-        <h2 className="italic">Subject ID: {id}</h2>
         <input type="file" onChange={handleImageChange} />
         <Button onClick={handleImageUpload}>Upload Image</Button>
         <div className="py-2">
       </div>
-      <Button onClick={handleClick}>Delete subject</Button>
+      <DeleteButton onClick={handleClick}>Delete subject</DeleteButton>
       <TypologyTable data={data} />
       </div>
     </div>

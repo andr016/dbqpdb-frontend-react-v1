@@ -3,6 +3,7 @@ import config from "../config";
 import NewTypology from "./NewTypology";
 import Link from "./base/Link";
 import ApiClient from "./ApiClient";
+import H1 from "./base/H1";
 
 interface Typology {
     typology_id: number;
@@ -30,7 +31,7 @@ const TypologyList = () => {
     }, []);
 
     return <div>
-        <h1 className="text-4xl py-2">Typologies</h1>
+        <H1>Typologies</H1>
         <table>
             <tbody>
                 {isLoading ? <tr><td colSpan={3}>Loading...</td></tr> :

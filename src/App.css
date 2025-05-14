@@ -54,3 +54,7 @@ html {
 .read-the-docs {
   color: #888;
 }
+
+@theme {
+    --color-dele: #ff0000;
+}

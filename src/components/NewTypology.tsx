@@ -3,6 +3,8 @@ import { useState } from "react";
 
 import config from "../config";
 import ApiClient from "./ApiClient";
+import Input from "./base/Input";
+import Button from "./base/Button";
 
 const NewTypology = () => {
     const [typology_name, setName] = useState('');
@@ -20,8 +22,8 @@ const NewTypology = () => {
     return (
         <div>
             <h3>New Typology</h3>
-            <input value={typology_name} type="text" onChange={(e) => setName(e.target.value)}/>
-            <button onClick={addTypology}>Create</button>
+            <Input value={typology_name} type="text" onChange={(e) => setName(e.target.value)}/>
+            <Button onClick={addTypology}>Create</Button>
         </div>
     )
 }

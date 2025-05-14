@@ -6,6 +6,8 @@ import Button from './base/Button';
 import Link from './base/Link';
 import ApiClient from './ApiClient';
 
+import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
+
 // Define TypeScript types for the expected props
 interface Type {
   type_id: number;
@@ -38,6 +40,8 @@ const TypologyTable: React.FC<TypologyTableProps> = ({ data }) => {
     const [typeListMap, setTypeListMap] = useState<Map<number, Type>>(new Map())
     const [error, setError] = useState(null); // State to store any error
 
+ let [isOpen, setIsOpen] = useState(false)
+
     const { id } = useParams()
 
     const apiClient = new ApiClient()
@@ -67,13 +71,13 @@ const TypologyTable: React.FC<TypologyTableProps> = ({ data }) => {
     
     const handleSubmit = async () => {
         try {
-            // Replace 'your-api-url' with the actual URL of your API
-            const response = await axios.post(new URL(config.apiPrefix+"submitsubject", apiClient.baseUrl).href, typologyData);
+            await axios.post(new URL(config.apiPrefix+"submitsubject", apiClient.baseUrl).href, typologyData).then( res => {
+                    console.log('Response:', res.data);
+                    setIsOpen(true)
+                }
+            );
             
-            // Handle the response (e.g., show a success message)
-            console.log('Response:', response.data);
         } catch (error) {
-            // Handle error (e.g., show an error message)
             console.error('Error:', error);
         }
     };
@@ -167,6 +171,13 @@ const TypologyTable: React.FC<TypologyTableProps> = ({ data }) => {
                 Reset changes
             </Button>
             <Button onClick={handleSubmit}>Save</Button>
+            <Dialog open={isOpen} onClose={() => setIsOpen(false)} transition className="relative z-50">
+                <div className="fixed inset-0 flex w-screen mt-10 items-baseline justify-left p-4">
+                <DialogPanel className="max-w-lg space-y-4 rounded-lg text-gray-100 bg-green-800 p-4">
+                    <DialogTitle className="font-bold">Subject saved successfully</DialogTitle>
+                </DialogPanel>
+                </div>
+            </Dialog>
         </div>
     );
 };
