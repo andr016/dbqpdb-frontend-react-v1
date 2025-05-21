@@ -7,6 +7,7 @@ import TypologyTable from './TypologyTable';
 import Button from './base/Button';
 import ApiClient from './ApiClient';
 import DeleteButton from './base/DeleteButton';
+import { Select } from '@headlessui/react';
 
 interface Post {
     subject_id: number;

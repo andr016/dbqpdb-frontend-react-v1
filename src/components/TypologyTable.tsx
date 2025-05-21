@@ -7,6 +7,7 @@ import Link from './base/Link';
 import ApiClient from './ApiClient';
 
 import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
+import Select from './base/Select';
 
 // Define TypeScript types for the expected props
 interface Type {
@@ -40,7 +41,7 @@ const TypologyTable: React.FC<TypologyTableProps> = ({ data }) => {
     const [typeListMap, setTypeListMap] = useState<Map<number, Type>>(new Map())
     const [error, setError] = useState(null); // State to store any error
 
- let [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false)
 
     const { id } = useParams()
 
@@ -71,9 +72,11 @@ const TypologyTable: React.FC<TypologyTableProps> = ({ data }) => {
     
     const handleSubmit = async () => {
         try {
-            await axios.post(new URL(config.apiPrefix+"submitsubject", apiClient.baseUrl).href, typologyData).then( res => {
+            await axios.post(new URL(config.apiPrefix+"submitsubject", apiClient.baseUrl).href, typologyData)
+            .then( res => {
                     console.log('Response:', res.data);
-                    setIsOpen(true)
+                    setIsOpen(true);
+                    setTimeout(() => setIsOpen(false), 2000); // 5000ms = 5 seconds
                 }
             );
             
@@ -109,18 +112,7 @@ const TypologyTable: React.FC<TypologyTableProps> = ({ data }) => {
                             <Link href={"/typology/"+typology.typology_id}>{typology.typology_display_name}</Link>
                         </td>
                         <td>
-                            <select
-                                className="border-2 bg-gray-200 border-gray-300
-                                hover:bg-gray-300 hover:border-gray-400
-                                
-                                border-none
-                                p-1
-                                rounded-lg
-                                dark:text-white
-                                dark:bg-gray-600
-                                dark:border-none
-                                dark:hover:bg-gray-700
-                                "
+                            <Select
                                 value={
                                     typologyData?.types?.map((typeId) => {
                                         const type = typeList.find(
@@ -160,7 +152,7 @@ const TypologyTable: React.FC<TypologyTableProps> = ({ data }) => {
                                         <option key={type.type_id} value={type.type_id}>{type.type_display_name}</option>
                                     ))}
                                     <option value="missing">Type missing</option>
-                            </select>
+                            </Select>
                         </td>
                     </tr>
                     ))
