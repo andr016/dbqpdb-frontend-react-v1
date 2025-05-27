@@ -8,6 +8,7 @@ import Button from './base/Button';
 import ApiClient from './ApiClient';
 import DeleteButton from './base/DeleteButton';
 import { Select } from '@headlessui/react';
+import Input from './base/Input';
 
 interface Post {
     subject_id: number;
@@ -28,7 +29,6 @@ interface Typology {
     typology_name: string;
     typology_display_name: string;
 }
-
 interface TypologyData {
     subject: string;
     subject_id: number;
@@ -38,7 +38,7 @@ interface TypologyData {
   
 function SubjectPage() {
     const { id } = useParams();
-    
+
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imageUrl, setImageUrl] = useState<string>("");
     
@@ -70,7 +70,6 @@ function SubjectPage() {
         }
       }
     };
-
     const [data, setData] = useState<TypologyData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -122,6 +121,7 @@ function SubjectPage() {
       <div className="display-flex">
         <h1 className="text-4xl py-2">{data?.subject}</h1>
         <input type="file" onChange={handleImageChange} />
+        <Input type={undefined} value={data?.subject}></Input>
         <Button onClick={handleImageUpload}>Upload Image</Button>
         <div className="py-2">
       </div>

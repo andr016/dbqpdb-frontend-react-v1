@@ -27,31 +27,39 @@ const SubjectsTable: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [groups, setGroups] = useState<Group[]>([]);
+  const [groupName, setGroupName] = useState<string>("")
+  const [currentGroup, setCurrentGroup] = useState<number>(0);
 
   const apiClient = new ApiClient()
   // Fetch subjects from the API
+
+  const fetchSubjects = (() =>{
+      axios
+        .get(new URL(currentGroup == 0 ? config.apiPrefix+"subject" : config.apiPrefix+"subject/group/"+currentGroup, apiClient.baseUrl).href)
+        .then((response) => {
+          setSubjects(response.data); // Assuming the API returns an array of subjects
+          setLoading(false);
+        })
+        .catch((error) => {
+          setError('Failed to fetch subjects');
+          setLoading(false);
+        })
+  })
+
   useEffect(() => {
-
+    fetchSubjects();
+    if (currentGroup) {
+      fetchSubjects();
+    }
     axios
-      .get(new URL(config.apiPrefix+"subject", apiClient.baseUrl).href)
-      .then((response) => {
-        setSubjects(response.data); // Assuming the API returns an array of subjects
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError('Failed to fetch subjects');
-        setLoading(false);
-      });
-
-    axios
-      .get(new URL(config.apiPrefix+"groups", apiClient.baseUrl).href)
+      .get(new URL(config.apiPrefix+"group", apiClient.baseUrl).href)
       .then((response) =>{
         setGroups(response.data)}
       )
       .catch((error)=>console.log(error))
-  }, []);
+  }, [currentGroup]);
 
-  const handleStatus = (data) => {
+  const handleStatus = (data: { status: any; }) => {
     console.log(data.status)
   }
 
@@ -66,18 +74,23 @@ const SubjectsTable: React.FC = () => {
 
   document.title = "All subjects"
 
-  const [groupName, setGroupName] = useState<string>("")
-  
+  const handleCurrentGroupChange = (event: { target: { value: any; }; }) => {
+    const value = event.target.value
+    setCurrentGroup(value)
+  }
 
   return (
     <div>
       <H1>Subjects</H1>
       <div className="py-5 w-3/4">
-        <Select>
-          <option>No group</option>
+        <Select value={currentGroup} onChange={handleCurrentGroupChange}>
+          <option value='0'>All</option>
+          {groups.map((group) => (
+            <option value={group.group_id}>{group.group_name}</option>
+          ))}
         </Select>
-        <Input type="text" onChange={(e) => setName(e.target.value)}/>
-        <Button>Add group</Button>
+        <Input type="text" onChange={(e: { target: { value: any; }; }) => setGroupName(e.target.value)} value={undefined}/>
+        <Button onClick={undefined}>Add group</Button>
 
         <div className="mt-4 flex flex-wrap">
             {subjects.map((subject) => (
