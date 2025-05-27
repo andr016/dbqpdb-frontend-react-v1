@@ -35,6 +35,11 @@ interface TypologyData {
     types: number[];
     image_url: string;
 }
+
+interface Subject {
+    subject_name: string;
+    
+}
   
 function SubjectPage() {
     const { id } = useParams();
@@ -121,7 +126,6 @@ function SubjectPage() {
       <div className="display-flex">
         <h1 className="text-4xl py-2">{data?.subject}</h1>
         <input type="file" onChange={handleImageChange} />
-        <Input type={undefined} value={data?.subject}></Input>
         <Button onClick={handleImageUpload}>Upload Image</Button>
         <div className="py-2">
       </div>
