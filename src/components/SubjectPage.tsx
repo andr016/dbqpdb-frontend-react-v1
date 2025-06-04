@@ -9,6 +9,8 @@ import ApiClient from './ApiClient';
 import DeleteButton from './base/DeleteButton';
 import { Select } from '@headlessui/react';
 import Input from './base/Input';
+import Parameter from './base/Parameter';
+import { Subject } from '../interfaces/subject.interface';
 
 interface Post {
     subject_id: number;
@@ -35,18 +37,14 @@ interface TypologyData {
     types: number[];
     image_url: string;
 }
-
-interface Subject {
-    subject_name: string;
-    
-}
   
 function SubjectPage() {
     const { id } = useParams();
 
     const [imageFile, setImageFile] = useState<File | null>(null);
-    const [imageUrl, setImageUrl] = useState<string>("");
     
+    const [subject, setSubject] = useState<Subject>();
+
     const apiClient = new ApiClient()
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,8 +82,10 @@ function SubjectPage() {
         .get(new URL(config.apiPrefix+"subject/"+id, apiClient.baseUrl).href)
         .then((response) => {
             setData(response.data);
-            setImageUrl(new URL(response.data.image_url, apiClient.baseUrl).href);
+            
             setLoading(false);
+            const newSubject: Subject = response.data.subject
+            setSubject(newSubject);
         })
         .catch((err) => {
             setError(err.message); 
@@ -103,7 +103,7 @@ function SubjectPage() {
     }
 
     async function handleClick() {
-        if (window.confirm(`Delete this subject?\n\n${data?.subject}`)) {
+        if (window.confirm(`Delete this subject?\n\n${subject?.subject_name}`)) {
         axios.post(new URL(config.apiPrefix+"delete/subject/"+id, apiClient.baseUrl).href)
             .then(response => {
                 console.log(response)
@@ -115,19 +115,22 @@ function SubjectPage() {
         }
     }
 
-    document.title = data?.subject
+    document.title = subject?.subject_name
 
     return (<div className="space-y-2">
-      {imageUrl && (
+      {subject?.image_url && (
       <div>
-        <img src={imageUrl} alt="subject picture" className="max-w-xl"/>
+        <img src={new URL(subject.image_url, apiClient.baseUrl).href} alt="subject picture" className="max-w-xl"/>
       </div>
     )}
       <div className="display-flex">
-        <h1 className="text-4xl py-2">{data?.subject}</h1>
+        <h1 className="text-4xl py-2">{subject?.subject_name}</h1>
         <input type="file" onChange={handleImageChange} />
         <Button onClick={handleImageUpload}>Upload Image</Button>
         <div className="py-2">
+        <Parameter name="Name" onChange={e => {}} type="text" parameterType="text" value={subject?.subject_name}></Parameter>
+        <Parameter name="Group" onChange={e => {}} type="text" parameterType="select" value={subject?.group_id}></Parameter>
+        <Button onClick={saveSubject}></Button>
       </div>
       <DeleteButton onClick={handleClick}>Delete subject</DeleteButton>
       <TypologyTable data={data} />

@@ -10,27 +10,26 @@ import config from '../config';
 import SubjectCard from './SubjectCard';
 import Select from './base/Select';
 
-// Define a TypeScript type for the subject data
-interface Subject {
-  subject_id: number;
-  subject_name: string;
-  image_url: string;
-}
+// Interfaces
+import { Group } from '../interfaces/group.interface';
+import { Subject } from '../interfaces/subject.interface';
 
-interface Group {
-  group_id: number;
-  group_name: string;
-}
+// Hooks
+import { useGroups } from '../hooks/useGroups';
+
+// Define a TypeScript type for the subject data
+
 
 const SubjectsTable: React.FC = () => {
+  const apiClient = new ApiClient()
+
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [groups, setGroups] = useState<Group[]>([]);
-  const [groupName, setGroupName] = useState<string>("")
+  const [groupName, setGroupName] = useState<string>("");
   const [currentGroup, setCurrentGroup] = useState<number>(0);
 
-  const apiClient = new ApiClient()
   // Fetch subjects from the API
 
   const fetchSubjects = (() =>{
@@ -51,6 +50,7 @@ const SubjectsTable: React.FC = () => {
     if (currentGroup) {
       fetchSubjects();
     }
+    
     axios
       .get(new URL(config.apiPrefix+"group", apiClient.baseUrl).href)
       .then((response) =>{
