@@ -11,6 +11,7 @@ import { Select } from '@headlessui/react';
 import Input from './base/Input';
 import Parameter from './base/Parameter';
 import { Subject } from '../interfaces/subject.interface';
+import { Group } from '../interfaces/group.interface';
 
 interface Post {
     subject_id: number;
@@ -76,13 +77,15 @@ function SubjectPage() {
     const [data, setData] = useState<TypologyData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [groups, setGroups] = useState<Group[]>([]);
+    const [groupName, setGroupName] = useState<string>("");
 
     useEffect(() => {
         axios
         .get(new URL(config.apiPrefix+"subject/"+id, apiClient.baseUrl).href)
         .then((response) => {
             setData(response.data);
-            
+            setGroupName(response.data.subject.group_id)
             setLoading(false);
             const newSubject: Subject = response.data.subject
             setSubject(newSubject);
@@ -91,6 +94,14 @@ function SubjectPage() {
             setError(err.message); 
             setLoading(false);
         });
+
+        axios
+          .get(new URL(config.apiPrefix+"groups", apiClient.baseUrl).href)
+          .then((response) =>{
+            setGroups(response.data)}
+          )
+          .catch((error)=>console.log(error))
+
     }, []) // empty array so it doesn't loop lol
 
     // Show loading message while fetching data
@@ -115,6 +126,12 @@ function SubjectPage() {
         }
     }
 
+    async function saveSubject() {
+        axios.put(new URL(config.apiPrefix+"subject/"+id, apiClient.baseUrl).href, subject)
+          .then(response => {console.log(response)})
+          .catch(error => {console.log(error)})
+    }
+
     document.title = subject?.subject_name
 
     return (<div className="space-y-2">
@@ -128,9 +145,24 @@ function SubjectPage() {
         <input type="file" onChange={handleImageChange} />
         <Button onClick={handleImageUpload}>Upload Image</Button>
         <div className="py-2">
-        <Parameter name="Name" onChange={e => {}} type="text" parameterType="text" value={subject?.subject_name}></Parameter>
-        <Parameter name="Group" onChange={e => {}} type="text" parameterType="select" value={subject?.group_id}></Parameter>
-        <Button onClick={saveSubject}></Button>
+        <Parameter name="Name" onChange={(e: { target: { value: any; }; }) => {
+          setSubject({
+            ...subject,  // Keep all existing fields
+            subject_name: e.target.value,  // Update only group_id
+          });
+        }} type="text" parameterType="text" value={subject?.subject_name}></Parameter>
+        <Parameter name="Group" onChange={(e: { target: { value: any; }; }) => {
+          setSubject({
+            ...subject,  // Keep all existing fields
+            group_id: parseInt(e.target.value, 10),  // Update only group_id
+          });
+        }} type="text" parameterType="select" value={subject?.group_id}>
+          <option value="0">None</option>
+          {groups.map((group) => (
+            <option value={group.group_id}>{group.group_name}</option>
+          ))}
+        </Parameter>
+        <Button onClick={saveSubject}>Save subject</Button>
       </div>
       <DeleteButton onClick={handleClick}>Delete subject</DeleteButton>
       <TypologyTable data={data} />

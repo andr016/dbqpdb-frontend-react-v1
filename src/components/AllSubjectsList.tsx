@@ -16,9 +16,7 @@ import { Subject } from '../interfaces/subject.interface';
 
 // Hooks
 import { useGroups } from '../hooks/useGroups';
-
-// Define a TypeScript type for the subject data
-
+import DeleteButton from './base/DeleteButton';
 
 const SubjectsTable: React.FC = () => {
   const apiClient = new ApiClient()
@@ -45,18 +43,21 @@ const SubjectsTable: React.FC = () => {
         })
   })
 
+  const fetchGroups = (() => {
+    axios
+      .get(new URL(config.apiPrefix+"groups", apiClient.baseUrl).href)
+      .then((response) =>{
+        setGroups(response.data)}
+      )
+      .catch((error)=>console.log(error))
+  })
+
   useEffect(() => {
     fetchSubjects();
     if (currentGroup) {
       fetchSubjects();
     }
-    
-    axios
-      .get(new URL(config.apiPrefix+"group", apiClient.baseUrl).href)
-      .then((response) =>{
-        setGroups(response.data)}
-      )
-      .catch((error)=>console.log(error))
+    fetchGroups();
   }, [currentGroup]);
 
   const handleStatus = (data: { status: any; }) => {
@@ -74,6 +75,29 @@ const SubjectsTable: React.FC = () => {
 
   document.title = "All subjects"
 
+  const addGroup = (() => {
+      const newGroup: Group = {
+        group_name: groupName, // Only set the name
+        // Other fields are omitted (will be `undefined` or use defaults)
+      };
+      axios
+        .post(new URL(config.apiPrefix+"groups/", apiClient.baseUrl).href, newGroup)
+        .then((r) => {console.log(r); fetchGroups})
+        .catch((err) => console.log(err))
+  })
+
+  const deleteGroup = (() => {
+    // redo group to use interface instead (or at least a group state)
+    if(currentGroup !== 0){
+      if (window.confirm(`Delete this group?\n\nNote:\nThis only deletes groups, not subjects, these will have their groups set to None.\n\n${currentGroup}`)) {
+        axios
+          .delete(new URL(config.apiPrefix+"groups/"+currentGroup, apiClient.baseUrl).href)
+          .then((r) => console.log(r))
+          .catch((err) => console.log(err))
+      }
+    }
+  })
+
   const handleCurrentGroupChange = (event: { target: { value: any; }; }) => {
     const value = event.target.value
     setCurrentGroup(value)
@@ -89,8 +113,9 @@ const SubjectsTable: React.FC = () => {
             <option value={group.group_id}>{group.group_name}</option>
           ))}
         </Select>
+        <DeleteButton onClick={deleteGroup}>Delete group</DeleteButton>
         <Input type="text" onChange={(e: { target: { value: any; }; }) => setGroupName(e.target.value)} value={undefined}/>
-        <Button onClick={undefined}>Add group</Button>
+        <Button onClick={addGroup}>Add group</Button>
 
         <div className="mt-4 flex flex-wrap">
             {subjects.map((subject) => (

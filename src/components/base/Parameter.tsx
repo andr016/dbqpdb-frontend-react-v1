@@ -51,6 +51,7 @@ const Parameter: React.FC<ParameterProps> = ({
           "
           type={type}
           value={value}
+          onChange={onChange}
         >{children}</select>
       </div>
     );
