@@ -17,9 +17,12 @@ import { Subject } from '../interfaces/subject.interface';
 // Hooks
 import { useGroups } from '../hooks/useGroups';
 import DeleteButton from './base/DeleteButton';
+import Typology from './Typology';
+import Cookies from 'universal-cookie';
 
 const SubjectsTable: React.FC = () => {
   const apiClient = new ApiClient()
+  const cookies = new Cookies();
 
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -32,7 +35,9 @@ const SubjectsTable: React.FC = () => {
 
   const fetchSubjects = (() =>{
       axios
-        .get(new URL(currentGroup == 0 ? config.apiPrefix+"subject" : config.apiPrefix+"subject/group/"+currentGroup, apiClient.baseUrl).href)
+        .get(new URL(currentGroup == 0 ? config.apiPrefix+"subject" : config.apiPrefix+"subject/group/"+currentGroup, apiClient.baseUrl).href, {headers:{
+        'Authorization':'Bearer '+cookies.get('token')
+      }})
         .then((response) => {
           setSubjects(response.data); // Assuming the API returns an array of subjects
           setLoading(false);
@@ -45,7 +50,9 @@ const SubjectsTable: React.FC = () => {
 
   const fetchGroups = (() => {
     axios
-      .get(new URL(config.apiPrefix+"groups", apiClient.baseUrl).href)
+      .get(new URL(config.apiPrefix+"groups", apiClient.baseUrl).href, {headers:{
+        'Authorization':'Bearer '+cookies.get('token')
+      }})
       .then((response) =>{
         setGroups(response.data)}
       )
