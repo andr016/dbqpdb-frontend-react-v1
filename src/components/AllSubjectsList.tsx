@@ -51,7 +51,7 @@ const SubjectsTable: React.FC = () => {
 
   const fetchGroups = (() => {
     axios
-      .get(new URL(config.apiPrefix+"groups", apiClient.baseUrl).href, {headers:{
+      .get(new URL(Config.apiPrefix+"groups", apiClient.baseUrl).href, {headers:{
         'Authorization':'Bearer '+cookies.get('token')
       }})
       .then((response) =>{
@@ -89,7 +89,7 @@ const SubjectsTable: React.FC = () => {
         // Other fields are omitted (will be `undefined` or use defaults)
       };
       axios
-        .post(new URL(config.apiPrefix+"groups/", apiClient.baseUrl).href, newGroup)
+        .post(new URL(Config.apiPrefix+"groups/", apiClient.baseUrl).href, newGroup)
         .then((r) => {console.log(r); fetchGroups})
         .catch((err) => console.log(err))
   })
