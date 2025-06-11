@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import config from '../config';
+import config from '../Config';
 import Button from './base/Button';
 import Link from './base/Link';
 import ApiClient from './ApiClient';

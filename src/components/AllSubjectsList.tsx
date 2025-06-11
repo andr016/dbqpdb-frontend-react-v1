@@ -1,43 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-import NewSubject from './NewSubject';
+import ApiClient from './ApiClient';
+import Config from '../Config';
+
+// Base components
 import Button from './base/Button';
 import Input from './base/Input';
 import H1 from './base/H1';
-import ApiClient from './ApiClient';
-import config from '../config';
-import SubjectCard from './SubjectCard';
 import Select from './base/Select';
+
+// Non-basic components
+import NewSubject from './NewSubject';
+import SubjectCard from './SubjectCard';
+import DeleteButton from './base/DeleteButton';
 
 // Interfaces
 import { Group } from '../interfaces/group.interface';
 import { Subject } from '../interfaces/subject.interface';
 
 // Hooks
-import { useGroups } from '../hooks/useGroups';
-import DeleteButton from './base/DeleteButton';
-import Typology from './Typology';
 import Cookies from 'universal-cookie';
 
 const SubjectsTable: React.FC = () => {
   const apiClient = new ApiClient()
   const cookies = new Cookies();
 
-  const [subjects, setSubjects] = useState<Subject[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [subjects, setSubjects] = useState<Subject[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
   const [groupName, setGroupName] = useState<string>("");
   const [currentGroup, setCurrentGroup] = useState<number>(0);
 
-  // Fetch subjects from the API
-
   const fetchSubjects = (() =>{
       axios
         .get(new URL(currentGroup == 0 ? config.apiPrefix+"subject" : config.apiPrefix+"subject/group/"+currentGroup, apiClient.baseUrl).href, {headers:{
-        'Authorization':'Bearer '+cookies.get('token')
-      }})
+        'Authorization':'Bearer '+cookies.get('token')}}
+      )
         .then((response) => {
           setSubjects(response.data); // Assuming the API returns an array of subjects
           setLoading(false);

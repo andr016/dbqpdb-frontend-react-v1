@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import H1 from "./base/H1";
-import config from "../config";
+import config from "../Config";
 import Button from "./base/Button";
 import ApiClient from "./ApiClient";
 import Input from "./base/Input";

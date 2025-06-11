@@ -3,7 +3,7 @@ import Button from "./base/Button"
 import H1 from "./base/H1"
 import Input from "./base/Input"
 import axios from "axios"
-import config from "../config"
+import config from "../Config"
 import ApiClient from "./ApiClient"
 import Cookies from 'universal-cookie';
 

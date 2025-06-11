@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import config from "../config";
+import config from "../Config";
 import NewTypology from "./NewTypology";
 import Link from "./base/Link";
 import ApiClient from "./ApiClient";

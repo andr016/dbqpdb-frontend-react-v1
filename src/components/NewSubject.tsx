@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 
-import config from "../config";
+import config from "../Config";
 import Button from "./base/Button";
 import Input from "./base/Input"
 import ApiClient from "./ApiClient";
