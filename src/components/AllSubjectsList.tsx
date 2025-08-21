@@ -24,6 +24,7 @@ import Cookies from 'universal-cookie';
 
 const SubjectsTable: React.FC = () => {
   const apiClient = new ApiClient()
+  // is this even used?
   const cookies = new Cookies();
 
   const [loading, setLoading] = useState<boolean>(true);
@@ -36,7 +37,7 @@ const SubjectsTable: React.FC = () => {
 
   const fetchSubjects = (() =>{
       axios
-        .get(new URL(currentGroup == 0 ? config.apiPrefix+"subject" : config.apiPrefix+"subject/group/"+currentGroup, apiClient.baseUrl).href, {headers:{
+        .get(new URL(currentGroup == 0 ? Config.apiPrefix+"subject" : Config.apiPrefix+"subject/group/"+currentGroup, apiClient.baseUrl).href, {headers:{
         'Authorization':'Bearer '+cookies.get('token')}}
       )
         .then((response) => {
