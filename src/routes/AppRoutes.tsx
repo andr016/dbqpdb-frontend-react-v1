@@ -9,6 +9,7 @@ import AllSubjectsList from '../components/AllSubjectsList'
 import TypologyList from '../components/TypologyList'
 import Typology from '../components/Typology'
 import LoginPage from '../components/LoginPage'
+import TypologyPage from '../components/TypologyPage'
 
 export const ROUTES = {
   HOME: '/',
@@ -26,7 +27,7 @@ export function AppRoutes() {
       <Route path={ROUTES.SUBJECT} element={<AllSubjectsList />} />
       <Route path={ROUTES.SUBJECT_ID} element={<SubjectPage />} />
       <Route path={ROUTES.TYPOLOGY} element={<TypologyList />} />
-      <Route path={ROUTES.TYPOLOGY_ID} element={<Typology />} />
+      <Route path={ROUTES.TYPOLOGY_ID} element={<TypologyList />} />
       <Route path={ROUTES.LOGIN} element={<LoginPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>

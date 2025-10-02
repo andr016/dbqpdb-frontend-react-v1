@@ -4,6 +4,9 @@ import NewTypology from "./NewTypology";
 import Link from "./base/Link";
 import ApiClient from "./ApiClient";
 import H1 from "./base/H1";
+import Typology from "./Typology";
+import Button from "./base/Button";
+import { useParams } from "react-router-dom";
 
 interface Typology {
     typology_id: number;
@@ -13,38 +16,55 @@ interface Typology {
   
 
 const TypologyList = () => {
+    const { id } = useParams()
     const [typologies, setTypologies] = useState<Typology[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [typology, setTypology] = useState<Typology>()
 
     const apiClient = new ApiClient
 
     useEffect(() => {
         const fetchTypologies = async () => {
             const response = await fetch(new URL(config.apiPrefix+"typology", apiClient.baseUrl).href);
-            const data = await response.json();
+            const data = await response.json() as Typology[];
             setTypologies(data);
             setIsLoading(false);
-            console.log(data);
+            if(id){
+                console.log(id)
+                const found = data.find(t => t.typology_id === Number(id))
+                setTypology(found || undefined)
+                console.log(found)
+            }
         }
 
         fetchTypologies();
     }, []);
 
     return <div>
-        <H1>Typologies</H1>
-        <table>
-            <tbody>
-                {isLoading ? <tr><td colSpan={3}>Loading...</td></tr> :
-                    typologies.map(typology =>
-                        <tr key={typology.typology_id}>
-                            <td><Link href={"/typology/" + typology.typology_id}>{typology.typology_display_name.length == 0 ? "noname!" : typology.typology_display_name}</Link></td>
-                        </tr>
-                        )
-                }
-            </tbody>
-        </table>
-        <NewTypology />
+        <div className="flex">
+            <div>
+                <H1>Typologies</H1>
+                <table>
+                    <tbody>
+                        {isLoading ? <tr><td colSpan={3}>Loading...</td></tr> :
+                            typologies.map(typology =>
+                                <tr key={typology.typology_id}>
+                                    {/* <td><Link href={"/typology/" + typology.typology_id}>{typology.typology_display_name.length == 0 ? "noname!" : typology.typology_display_name}</Link></td> */}
+                                    <td>
+                                        <Button onClick={() => setTypology(typology)}>{typology.typology_display_name.length == 0 ? "noname!" : typology.typology_display_name}</Button>
+                                    </td>
+                                </tr>
+                                )
+                        }
+                    </tbody>
+                </table>
+                <NewTypology />
+            </div>
+            <div>
+                <Typology typology={typology}/>
+            </div>
         </div>
+    </div>
 }
 
 export default TypologyList

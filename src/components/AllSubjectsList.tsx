@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-import ApiClient from './ApiClient';
+import ApiClient from '../ApiClient.ts';
 import Config from '../Config';
 
 // Base components
@@ -35,37 +35,40 @@ const SubjectsTable: React.FC = () => {
   const [groupName, setGroupName] = useState<string>("");
   const [currentGroup, setCurrentGroup] = useState<number>(0);
 
-  const fetchSubjects = (() =>{
-      axios
-        .get(new URL(currentGroup == 0 ? Config.apiPrefix+"subject" : Config.apiPrefix+"subject/group/"+currentGroup, apiClient.baseUrl).href, {headers:{
-        'Authorization':'Bearer '+cookies.get('token')}}
-      )
-        .then((response) => {
-          setSubjects(response.data); // Assuming the API returns an array of subjects
-          setLoading(false);
-        })
-        .catch((error) => {
-          setError('Failed to fetch subjects');
-          setLoading(false);
-        })
-  })
+  // Fetch subjects from api/subject
+  const fetchSubjects = async () => {
+    try {
+      const endpoint =
+        currentGroup === 0
+          ? `${Config.apiPrefix}subject`
+          : `${Config.apiPrefix}subject/group/${currentGroup}`;
 
-  const fetchGroups = (() => {
-    axios
-      .get(new URL(Config.apiPrefix+"groups", apiClient.baseUrl).href, {headers:{
-        'Authorization':'Bearer '+cookies.get('token')
-      }})
-      .then((response) =>{
-        setGroups(response.data)}
-      )
-      .catch((error)=>console.log(error))
-  })
+      const response = await apiClient.get<Subject[]>(endpoint, {
+        Authorization: `Bearer ${cookies.get('token')}`,
+      });
+
+      setSubjects(response.data);
+    } catch (err: any) {
+      setError('Failed to fetch subjects:\n\n' + (err.message || err));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch groups from api/groups
+  const fetchGroups = async () => {
+    try {
+      const response = await apiClient.get<Group[]>(`${Config.apiPrefix}groups`, {
+        Authorization: `Bearer ${cookies.get('token')}`,
+      });
+      setGroups(response.data);
+    } catch (err: any) {
+      console.error('Failed to fetch groups:', err);
+    }
+  };
 
   useEffect(() => {
     fetchSubjects();
-    if (currentGroup) {
-      fetchSubjects();
-    }
     fetchGroups();
   }, [currentGroup]);
 
@@ -84,28 +87,46 @@ const SubjectsTable: React.FC = () => {
 
   document.title = "All subjects"
 
-  const addGroup = (() => {
-      const newGroup: Group = {
-        group_name: groupName, // Only set the name
-        // Other fields are omitted (will be `undefined` or use defaults)
-      };
-      axios
-        .post(new URL(Config.apiPrefix+"groups/", apiClient.baseUrl).href, newGroup)
-        .then((r) => {console.log(r); fetchGroups})
-        .catch((err) => console.log(err))
-  })
+  const addGroup = async () => {
+    // Check for empty string
+    if (!groupName.trim()) return;
 
-  const deleteGroup = (() => {
-    // redo group to use interface instead (or at least a group state)
-    if(currentGroup !== 0){
-      if (window.confirm(`Delete this group?\n\nNote:\nThis only deletes groups, not subjects, these will have their groups set to None.\n\n${currentGroup}`)) {
-        axios
-          .delete(new URL(config.apiPrefix+"groups/"+currentGroup, apiClient.baseUrl).href)
-          .then((r) => console.log(r))
-          .catch((err) => console.log(err))
-      }
+    try {
+      const newGroup: Partial<Group> = { group_name: groupName };
+      await apiClient.post(`${Config.apiPrefix}groups/`, newGroup, {
+        Authorization: `Bearer ${cookies.get('token')}`,
+      });
+      setGroupName('');
+      fetchGroups(); // Refresh list
+    } catch (err: any) {
+      console.error('Failed to add group:', err);
     }
-  })
+  };
+
+  // Delete group
+  const deleteGroup = async () => {
+    if (currentGroup === 0) {
+      console.log("Attempted to delete group 0")
+      return;
+    }
+    // NOTE: Leave it as const
+    const confirmDelete = window.confirm(
+      `Delete this group?\n\nNote:\nThis only deletes the group, not subjects. Subjects will have their group set to None.\n\nGroup ID: ${currentGroup}`
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await apiClient.delete(`${Config.apiPrefix}groups/${currentGroup}`, {
+        Authorization: `Bearer ${cookies.get('token')}`,
+      });
+      setCurrentGroup(0); // Reset to "All"
+      fetchGroups();
+      fetchSubjects(); // Refetch subjects since group changed
+    } catch (err: any) {
+      console.error('Failed to delete group:', err);
+    }
+  };
 
   const handleCurrentGroupChange = (event: { target: { value: any; }; }) => {
     const value = event.target.value
@@ -117,12 +138,12 @@ const SubjectsTable: React.FC = () => {
       <H1>Subjects</H1>
       <div className="py-5 w-3/4">
         <Select value={currentGroup} onChange={handleCurrentGroupChange}>
-          <option value='0'>All</option>
+          <option value={0}>All</option>
           {groups.map((group) => (
             <option value={group.group_id}>{group.group_name}</option>
           ))}
         </Select>
-        <DeleteButton onClick={deleteGroup}>Delete group</DeleteButton>
+        <DeleteButton onClick={deleteGroup} label="Delete group"/>
         <Input type="text" onChange={(e: { target: { value: any; }; }) => setGroupName(e.target.value)} value={undefined}/>
         <Button onClick={addGroup}>Add group</Button>
 

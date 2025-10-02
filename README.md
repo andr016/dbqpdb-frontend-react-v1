@@ -18,4 +18,3 @@ npm run dev
 ```bash
 npm run dev -- --host
 ```
-_(todo: fix the empty flag)_

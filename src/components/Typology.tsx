@@ -6,6 +6,7 @@ import config from "../Config";
 import Button from "./base/Button";
 import ApiClient from "./ApiClient";
 import Input from "./base/Input";
+import DeleteButton from "./base/DeleteButton";
 
 interface Type {
     type_id: number;
@@ -14,9 +15,22 @@ interface Type {
     type_display_name: string;
 }
 
-const Typology = () => {
-    const { id } = useParams();
-    console.log(id);
+interface Typology {
+    typology_id: number;
+    typology_name: string;
+    typology_display_name: string;
+}
+
+interface TypologyProps {
+    typology: Typology | undefined;
+}
+
+// fix string | undefined
+const Typology: React.FC<TypologyProps> = (
+   typology 
+)=>{
+    const id = typology.typology?.typology_id
+    if(typology.typology){
 
     const [types, setTypes] = useState<Type[]>();
     const [newTypes, setNewTypes] = useState<Type[]>();
@@ -27,6 +41,7 @@ const Typology = () => {
     useEffect(() => {
         const fetchTypes = async () => {
             // will totally fix that later
+            setLoading(true);
             const response = await fetch(new URL(config.apiPrefix+`typology/${id}`, apiClient.baseUrl).href);
             const data = await response.json();
             setTypes(data);
@@ -34,12 +49,12 @@ const Typology = () => {
             setLoading(false);
         }
         fetchTypes();
-    }, []);
+    }, [id]);
 
     const addNewType = () => {
         const newType: Type = {
             type_id: -1-newTypes?.length!,
-            typology_id: parseInt(id!),
+            typology_id: id!,
             type_name: '',
             type_display_name: '',
         }
@@ -72,8 +87,8 @@ const Typology = () => {
 
     return (
         <div>
-            <H1>Typology</H1>
-            <Button onClick={deleteTypology}>Delete typology</Button>
+            <H1>{typology.typology.typology_display_name}</H1>
+            <DeleteButton onClick={deleteTypology}>Delete typology</DeleteButton>
             <p>Type count: {newTypes?.length}</p>
             <Button onClick={addNewType}>New type</Button>
             <Button onClick={resetToFetch}>Reset</Button>
@@ -81,6 +96,12 @@ const Typology = () => {
             <table>
                 <thead>
                     <tr>
+                        <td>
+                            name
+                        </td>
+                        <td>
+                            button
+                        </td>
                     </tr>
                 </thead>
                 <tbody>
@@ -107,7 +128,9 @@ const Typology = () => {
                 </tbody>
             </table>
         </div>
+    
     )
+    }
 }
 
 export default Typology

@@ -1,5 +1,6 @@
 const Config = {
-    apiUrl: 'http://localhost:8000/api/',   // change to match your api url up to prefix
+    apiUrl: 'http://localhost:8000/api/', 
+    baseUrl: 'http://localhost:8000/',  // change to match your api url up to prefix
     apiPrefix: 'api/'
   };
   
