@@ -5,6 +5,7 @@ import config from "../Config";
 import Button from "./base/Button";
 import Input from "./base/Input"
 import ApiClient from "./ApiClient";
+import FrutigerButton from "./base/FrutigerButton";
 
 
 
@@ -27,7 +28,7 @@ const NewSubject = ({ status }) => { // status is meant for updating subject lis
         <div>
             <h3 className="text-gray-400 mb-1">Create new subject</h3>
             <Input type="text" onChange={(e) => setName(e.target.value)}/>
-            <Button onClick={addSubject}>Add</Button>
+            <FrutigerButton onClick={addSubject}>Add</FrutigerButton>
         </div>
     )
 }
