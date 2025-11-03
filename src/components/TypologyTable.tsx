@@ -159,7 +159,7 @@ const TypologyTable: React.FC<TypologyTableProps> = ({ data }) => {
                 )}
                 </tbody>
             </table>
-            <Button onClick={(e) => setTypologyData(data)}>
+            <Button onClick={() => setTypologyData(data)}>
                 Reset changes
             </Button>
             <Button onClick={handleSubmit}>Save</Button>

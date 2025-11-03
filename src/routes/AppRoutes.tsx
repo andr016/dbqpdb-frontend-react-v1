@@ -7,9 +7,7 @@ import NotFound from '../components/NotFound'
 import SubjectPage from '../components/SubjectPage'
 import AllSubjectsList from '../components/AllSubjectsList'
 import TypologyList from '../components/TypologyList'
-import Typology from '../components/Typology'
 import LoginPage from '../components/LoginPage'
-import TypologyPage from '../components/TypologyPage'
 
 export const ROUTES = {
   HOME: '/',

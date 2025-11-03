@@ -4,8 +4,8 @@ interface SubjectCardProps {
     src: string,
     subject_name: string,
     subject_id: number,
-    primary_type: string,
-    secondary_type: string
+    primary_type?: string,
+    secondary_type?: string
 }
 
 const SubjectCard: React.FC<SubjectCardProps> = (
