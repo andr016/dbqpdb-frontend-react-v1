@@ -14,7 +14,7 @@ const SubjectCard: React.FC<SubjectCardProps> = (
     }) => {
 return(
 //= ({src, subject_name, subject_id, primary_type, secondary_type}) => (
-    <div className="items-center space-x-3 w-64 rounded-lg dark:bg-gray-800 dark:hover:bg-gray-700 border-radius-100 cursor-pointer inline-flex " onClick={(e)=>window.location.href="/subject/"+subject_id}>
+    <div className="items-center space-x-3 w-[239px] rounded-lg dark:bg-gray-800 dark:hover:bg-gray-700 border-radius-100 cursor-pointer inline-flex " onClick={(e)=>window.location.href="/subject/"+subject_id}>
         <img className="w-20 h-20 rounded-l-lg" src={src}></img>
         <div className="w-20">
             <Link href={`/subject/${subject_id}`}>{subject_name}</Link>

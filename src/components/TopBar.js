@@ -6,6 +6,6 @@ const TopBar = () => {
     const handleClick = () => {
         alert(`Da Best Quality Personality Database\n\nVersion: ${version}`);
     };
-    return _jsxs("div", { className: "space-x-10 px-4 py-2 bg-gray-300 dark:bg-gray-800", children: [_jsx(Link, { href: "/subject", children: "Subjects" }), _jsx(Link, { href: "/typology", children: "Typologies" }), _jsx(Link, { href: "/login", children: "Log in" }), _jsx(Link, { href: "#", onClick: handleClick, children: "About" })] });
+    return _jsxs("div", { className: "space-x-10 px-4 py-2 bg-gray-300 dark:bg-gray-800", children: [_jsx(Link, { href: "/", children: "DBQPDB" }), _jsx(Link, { href: "/subject", children: "Subjects" }), _jsx(Link, { href: "/typology", children: "Typologies" }), _jsx(Link, { href: "/login", children: "Log in" }), _jsx(Link, { href: "#", onClick: handleClick, children: "About" })] });
 };
 export default TopBar;

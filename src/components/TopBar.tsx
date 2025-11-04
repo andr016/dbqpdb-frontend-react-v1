@@ -9,6 +9,7 @@ const TopBar = () => {
     }
 
     return <div className="space-x-10 px-4 py-2 bg-gray-300 dark:bg-gray-800">
+        <Link href="/">DBQPDB</Link>
         <Link href="/subject">Subjects</Link>
         <Link href="/typology">Typologies</Link>
         <Link href="/login">Log in</Link>

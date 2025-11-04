@@ -136,7 +136,7 @@ const SubjectsTable: React.FC = () => {
   return (
     <div>
       <H1>Subjects</H1>
-      <div className="py-5 w-3/4">
+      <div className="py-5">
         <Select value={currentGroup} onChange={handleCurrentGroupChange}>
           <option value={0}>All</option>
           {groups.map((group) => (
